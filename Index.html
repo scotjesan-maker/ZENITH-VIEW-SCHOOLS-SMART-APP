@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>School Portal App</title>
+  <style>
+    /* Reset & base styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f2f4f8;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem;
+    }
+    main {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 900px;
+      padding: 2rem;
+    }
+    h1, h2, h3 {
+      color: #004085;
+    }
+
+    /* Navigation tabs for dashboard */
+    nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #004085;
+    }
+    nav button {
+      background: none;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      color: #004085;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    nav button.active, nav button:hover {
+      border-color: #004085;
+      font-weight: bold;
+    }
+
+    /* Forms */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    select,
+    textarea {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      width: 100%;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #004085;
+      outline: none;
+      box-shadow: 0 0 5px #004085;
+    }
+    button[type="submit"] {
+      background-color: #004085;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      max-width: 150px;
+    }
+    button[type="submit"]:hover {
+      background-color: #002752;
+    }
+
+    /* Result table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: left;
+    }
+    th {
+      background-color: #e9ecef;
+    }
+
+    /* Sections hidden by default */
+    section {
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+
+    /* Message/interaction styles */
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+      nav {
+        flex-direction: column;
+      }
+      nav button {
+        width: 100%;
+        text-align: left;
+        padding-left: 0;
+      }
+      form {
+        max-width: 100%;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <main>
+    <!-- Login Page -->
+    <section id="loginPage" class="active" aria-label="Student login page">
+      <h1>Welcome to School Portal</h1>
+      <form id="loginForm" aria-describedby="loginDesc">
+        <p id="loginDesc">Please enter your student ID and password to access your dashboard.</p>
+        <label for="studentIdLogin">Student ID</label>
+        <input type="text" id="studentIdLogin" name="studentIdLogin" required autocomplete="username" aria-required="true" />
+
+        <label for="passwordLogin">Password</label>
+        <input type="password" id="passwordLogin" name="passwordLogin" required autocomplete="current-password" aria-required="true" />
+
+        <button type="submit">Login</button>
+      </form>
+    </section>
+
+    <!-- Dashboard Page -->
+    <section id="dashboardPage" aria-label="Student dashboard" tabindex="-1">
+      <h1>Student Dashboard</h1>
+      <nav role="tablist" aria-label="Dashboard navigation">
+        <button role="tab" aria-selected="true" aria-controls="feesSection" id="tabFees" class="active">School Fees</button>
+        <button role="tab" aria-selected="false" aria-controls="resultsSection" id="tabResults">Results</button>
+        <button role="tab" aria-selected="false" aria-controls="interactionSection" id="tabInteraction">Interaction</button>
+      </nav>
+
+      <!-- School Fees Section -->
+      <section id="feesSection" role="tabpanel" aria-labelledby="tabFees" class="active">
+        <h2>School Fees Status</h2>
+        <p><strong>Status:</strong> <span id="feeStatus">Unpaid</span></p>
+        <p><strong>Amount Due:</strong> <span id="feeAmount">$500.00</span></p>
+
+        <h3>Make a Payment</h3>
+        <form id="feePaymentForm" aria-describedby="feePaymentDesc">
+          <p id="feePaymentDesc">Enter payment details below.</p>
+          <label for="paymentAmount">Amount (USD)</label>
+          <input type="number" id="paymentAmount" name="paymentAmount" min="1" step="0.01" required aria-required="true" value="500" />
+
+          <label for="paymentMethod">Payment Method</label>
+          <select id="paymentMethod" name="paymentMethod" required aria-required="true">
+            <option value="" disabled selected>Select payment method</option>
+            <option value="creditCard">Credit Card</option>
+            <option value="debitCard">Debit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="bankTransfer">Bank Transfer</option>
+          </select>
+
+          <button type="submit">Pay Now</button>
+        </form>
+      </section>
+
+      <!-- Results Section -->
+      <section id="resultsSection" role="tabpanel" aria-labelledby="tabResults">
+        <h2>Academic Results</h2>
+
+        <table aria-describedby="resultsDesc">
+          <caption id="resultsDesc">List of subjects and grades</caption>
+          <thead>
+            <tr>
+              <th scope="col">Subject</th>
+              <th scope="col">Grade</th>
+              <th scope="col">Comments</th>
+            </tr>
+          </thead>
+          <tbody id="resultsTableBody">
+            <tr>
+              <td>Mathematics</td>
+              <td>A</td>
+              <td>Excellent performance</td>
+            </tr>
+            <tr>
+              <td>English</td>
+              <td>B+</td>
+              <td>Good understanding</td>
+            </tr>
+            <tr>
+              <td>Science</td>
+              <td>A-</td>
+              <td>Shows curiosity</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Upload Result Document</h3>
+        <form id="uploadResultForm" aria-describedby="uploadResultDesc" enctype="multipart/form-data">
+          <p id="uploadResultDesc">Upload a PDF or image of your result slip.</p>
+          <label for="resultFile">Choose file</label>
+          <input type="file" id="resultFile" name="resultFile" accept=".pdf,image/*" required aria-required="true" />
+          <button type="submit">Upload</button>
+        </form>
+      </section>
+
+      <!-- Interaction Section -->
+      <section id="interactionSection" role="tabpanel" aria-labelledby="tabInteraction">
+        <h2>Contact School</h2>
+        <form id="interactionForm" aria-describedby="interactionDesc">
+          <p id="interactionDesc">Send a message or query to the school administration.</p>
+          <label for="messageSubject">Subject</label>
+          <input type="text" id="messageSubject" name="messageSubject" required aria-required="true" />
+
+          <label for="messageContent">Message</label>
+          <textarea id="messageContent" name="messageContent" required aria-required="true" placeholder="Write your message here..."></textarea>
+
+          <button type="submit">Send Message</button>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    // Simple JS to handle page & tab navigation (simulate multi-page app)
+
+    // Elements
+    const loginPage = document.getElementById('loginPage');
+    const dashboardPage = document.getElementById('dashboardPage');
+    const loginForm = document.getElementById('loginForm');
+
+    // Dashboard tabs and sections
+    const tabs = dashboardPage.querySelectorAll('nav button[role="tab"]');
+    const tabPanels = dashboardPage.querySelectorAll('section[role="tabpanel"]');
+
+    // Simulated login action - Normally, you'd verify credentials with backend
+    loginForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Simple validation example
+      const studentId = loginForm.studentIdLogin.value.trim();
+      const password = loginForm.passwordLogin.value;
+
+      if (studentId && password) {
+        // Hide login page, show dashboard
+        loginPage.classList.remove('active');
+        dashboardPage.classList.add('active');
+
+        // Focus dashboard heading for accessibility
+        dashboardPage.focus();
+
+        // Optionally clear form
+        loginForm.reset();
+
+        // You could load student-specific data here
+      } else {
+        alert('Please enter valid credentials.');
+      }
+    });
+
+    // Tab switching logic for dashboard
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class & aria-selected from all tabs
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        // Hide all tab panels
+        tabPanels.forEach(panel => panel.classList.remove('active'));
+
+        // Activate clicked tab and associated panel
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        const panelId = tab.getAttribute('aria-controls');
+        document.getElementById(panelId).classList.add('active');
+      });
+    });
+
+    // Payment form submission handler
+    const feePaymentForm = document.getElementById('feePaymentForm');
+    feePaymentForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const amount = parseFloat(feePaymentForm.paymentAmount.value);
+      if (amount > 0) {
+        // Simulate payment success
+        alert(`Payment of $${amount.toFixed(2)} successful! Thank you.`);
+        document.getElementById('feeStatus').textContent = 'Paid';
+        document.getElementById('feeAmount').textContent = '$0.00';
+        feePaymentForm.reset();
+      } else {
+        alert('Please enter a valid payment amount.');
+      }
+    });
+
+    // Result upload form handler
+    const uploadResultForm = document.getElementById('uploadResultForm');
+    uploadResultForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const fileInput = uploadResultForm.resultFile;
+      if (fileInput.files.length === 0) {
+        alert('Please select a file to upload.');
+        return;
+      }
+      // Simulate upload
+      alert(`Result document "${fileInput.files[0].name}" uploaded successfully.`);
+      uploadResultForm.reset();
+    });
+
+    // Interaction form handler
+    const interactionForm = document.getElementById('interactionForm');
+    interactionForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const subject = interactionForm.messageSubject.value.trim();
+      const message = interactionForm.messageContent.value.trim();
+      if (subject && message) {
+        alert('Your message has been sent. We will respond shortly.');
+        interactionForm.reset();
+      } else {
+        alert('Please fill in both subject and message.');
+      }
+    });
+
+  </script>
+</body>
+</html>
